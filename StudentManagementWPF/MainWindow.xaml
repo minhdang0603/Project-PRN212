@@ -1,0 +1,485 @@
+﻿<Window x:Class="StudentManagementWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentManagementWPF"
+        xmlns:validation="clr-namespace:StudentManagementWPF.Validations"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="700"
+        Width="800"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!-- Style for DataGridColumnHeader -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="5" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0"
+               HorizontalAlignment="Center"
+               Content="Student Management"
+               FontWeight="SemiBold"
+               Foreground="BlueViolet"
+               FontSize="28" />
+        <TabControl Grid.Row="1"
+                    Name="tbControl"
+                    SelectionChanged="tbControl_SelectionChanged">
+            <TabItem Header="Student"
+                     FontSize="15"
+                     Padding="20,5,20,5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1.5*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0"
+                              AutoGenerateColumns="False"
+                              Name="dgStudent"
+                              SelectionChanged="dgStudent_SelectionChanged"
+                              SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id"
+                                                Width="40"
+                                                Binding="{Binding StudentId}" />
+                            <DataGridTextColumn Header="First Name"
+                                                Width="*"
+                                                Binding="{Binding FirstName}" />
+                            <DataGridTextColumn Header="Last Name"
+                                                Width="*"
+                                                Binding="{Binding LastName}" />
+                            <DataGridTextColumn Header="Phone"
+                                                Width="*"
+                                                Binding="{Binding Phone}" />
+                            <DataGridTextColumn Header="Address"
+                                                Width="*"
+                                                Binding="{Binding Address}" />
+                            <DataGridTextColumn Header="DateOfBirth"
+                                                Width="*"
+                                                Binding="{Binding DateOfBirth}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Label Content="Student Id:"
+                                   Margin="0,0,20,0" />
+                            <TextBox x:Name="txtStudentId"
+                                     IsReadOnly="True"
+                                     VerticalContentAlignment="Center"
+                                     Width="100"
+                                     Height="25" />
+                            <Label Content="First Name:"
+                                   Margin="20,0,0,0" />
+                            <TextBox x:Name="txtFristName"
+                                     Width="180"
+                                     VerticalContentAlignment="Center"
+                                     Height="25">
+                                <TextBox.Text>
+                                    <Binding Path="FirstName"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule ErrorMessage="First name cannot be empty." />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Validation.HasError"
+                                                     Value="True">
+                                                <Setter Property="ToolTip"
+                                                        Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                                    Path=(Validation.Errors)/ErrorContent}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <Label Content="Last Name:"
+                                   Margin="20,0,0,0" />
+                            <TextBox x:Name="txtLastName"
+                                     Width="180"
+                                     VerticalContentAlignment="Center"
+                                     Height="25">
+                                <TextBox.Text>
+                                    <Binding Path="LastName"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule ErrorMessage="Last name cannot be empty." />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Validation.HasError"
+                                                     Value="True">
+                                                <Setter Property="ToolTip"
+                                                        Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                                        Path=(Validation.Errors)/ErrorContent}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Label Content="Phone:"
+                                   Margin="0,0,45,0" />
+                            <TextBox x:Name="txtPhone"
+                                     Width="170"
+                                     VerticalContentAlignment="Center"
+                                     Height="25">
+                                <TextBox.Text>
+                                    <Binding Path="Phone"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:PhoneValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Validation.HasError"
+                                                     Value="True">
+                                                <Setter Property="ToolTip"
+                                                        Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                                        Path=(Validation.Errors)/ErrorContent}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <Label Content="Address:"
+                                   Margin="130,0,0,0"
+                                   Width="81" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Label Content="Date of Birth:" />
+                            <DatePicker Margin="3,0,0,0"
+                                        Width="170"
+                                        x:Name="dpDob" />
+                        </StackPanel>
+                        <TextBox Grid.Row="2"
+                                 Grid.RowSpan="2"
+                                 x:Name="txtAddress"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 Margin="469,10,23,0" />
+                        <StackPanel Grid.Row="4"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Button x:Name="btnSearchStudent"
+                                    Click="btnSearchStudent_Click"
+                                    Width="50"
+                                    Margin="3,0,0,0"
+                                    Content="Search" />
+                            <TextBox x:Name="txtSearch"
+                                     Width="170"
+                                     HorizontalAlignment="Left" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="5"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,10,0,0">
+                            <Button Content="Add"
+                                    Name="btnAddStudet"
+                                    Click="btnAddStudet_Click"
+                                    Width="100"
+                                    Height="30" />
+                            <Button Content="Edit"
+                                    Name="btnUpdateStudent"
+                                    Click="btnUpdateStudent_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                            <Button Content="Delete"
+                                    Name="btnDeleteStudent"
+                                    Click="btnDeleteStudent_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                            <Button Content="Refresh"
+                                    Name="btnRefreshStudent"
+                                    Click="btnRefreshStudent_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Course"
+                     FontSize="15"
+                     Padding="20,5,20,5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1.5*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0"
+                              AutoGenerateColumns="False"
+                              Name="dgCourse"
+                              SelectionChanged="dgCourse_SelectionChanged"
+                              SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id"
+                                                Width="40"
+                                                Binding="{Binding CourseId}" />
+                            <DataGridTextColumn Header="Course Name"
+                                                Width="*"
+                                                Binding="{Binding CourseName}" />
+                            <DataGridTextColumn Header="Hours"
+                                                Width="0.5*"
+                                                Binding="{Binding CourseHours}" />
+                            <DataGridTextColumn Header="Description"
+                                                Width="2*"
+                                                Binding="{Binding CourseDescription}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Label Content="Course Id:"
+                                   Margin="0,0,20,0" />
+                            <TextBox x:Name="txtCourseId"
+                                     IsReadOnly="True"
+                                     VerticalContentAlignment="Center"
+                                     Width="100"
+                                     Height="25" />
+                            <Label Content="Course Name:"
+                                   Margin="20,0,0,0" />
+                            <TextBox x:Name="txtCourseName"
+                                     Width="170"
+                                     VerticalContentAlignment="Center"
+                                     Height="25" />
+                            <Label Content="Course hours:"
+                                   Margin="20,0,0,0" />
+                            <TextBox x:Name="txtCourseHours"
+                                     Width="150"
+                                     VerticalContentAlignment="Center"
+                                     Height="25">
+                                <TextBox.Text>
+                                    <Binding Path="CourseHours"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:CourseHoursValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Validation.HasError"
+                                                     Value="True">
+                                                <Setter Property="ToolTip"
+                                                        Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                                    Path=(Validation.Errors)/ErrorContent}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                        <Label Grid.Row="2"
+                               Content="Course description:" />
+                        <TextBox Grid.Row="2"
+                                 Grid.RowSpan="2"
+                                 x:Name="txtCourseDescription"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 Margin="146,10,346,0" />
+                        <StackPanel Grid.Row="5"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,10,0,0">
+                            <Button Content="Add"
+                                    Name="btnAddCourse"
+                                    Click="btnAddCourse_Click"
+                                    Width="100"
+                                    Height="30" />
+                            <Button Content="Edit"
+                                    Name="btnUpdateCourse"
+                                    Click="btnUpdateCourse_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                            <Button Content="Delete"
+                                    Name="btnDeleteCourse"
+                                    Click="btnDeleteCourse_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                            <Button Content="Refresh"
+                                    Name="btnRefreshCourse"
+                                    Click="btnRefreshCourse_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Report"
+                     FontSize="15"
+                     Padding="20,5,20,5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1.5*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0"
+                              AutoGenerateColumns="False"
+                              Name="dgScore"
+                              SelectionChanged="dgScore_SelectionChanged"
+                              SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Student Name"
+                                                Width="*"
+                                                Binding="{Binding Student.FullName}" />
+                            <DataGridTextColumn Header="Course Name"
+                                                Width="*"
+                                                Binding="{Binding Course.CourseName}" />
+                            <DataGridTextColumn Header="Score"
+                                                Width="80"
+                                                Binding="{Binding StudentScore}" />
+                            <DataGridTextColumn Header="Description"
+                                                Width="*"
+                                                Binding="{Binding StudentDescription}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Label Content="Course:"
+                                   Margin="0,0,20,0" />
+                            <ComboBox x:Name="cboCourses"
+                                     Width="150"
+                                     Height="25" 
+                                     SelectionChanged="cboCourses_SelectionChanged"/>
+                            <Label Content="Student:"
+                                   Margin="20,0,0,0" />
+                            <ComboBox x:Name="cboStudents"
+                                     Width="160"
+                                     Height="25" />
+                            <Label Content="Score:"
+                                   Margin="20,0,0,0" />
+                            <TextBox x:Name="txtScore"
+                                     Width="180"
+                                     VerticalContentAlignment="Center"
+                                     Height="25">
+                                <TextBox.Text>
+                                    <Binding Path="Score"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:ScoreValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Validation.HasError"
+                                                     Value="True">
+                                                <Setter Property="ToolTip"
+                                                        Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                                        Path=(Validation.Errors)/ErrorContent}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                        <Label Content="Description:"
+                               Grid.Row="2" />
+                        <TextBox Grid.Row="2"
+                                 x:Name="txtScoreDesciption"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Grid.RowSpan="2"
+                                 Margin="95,10,397,0" />
+                        <StackPanel Grid.Row="5"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,10,0,0">
+                            <Button Content="Add"
+                                    Name="btnAddScore"
+                                    Click="btnAddScore_Click"
+                                    Width="100"
+                                    Height="30" />
+                            <Button Content="Edit"
+                                    Name="btnUpdateScore"
+                                    Click="btnUpdateScore_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                            <Button Content="Delete"
+                                    Name="btnDeleteScore"
+                                    Click="btnDeleteScore_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                            <Button Content="Refresh"
+                                    Name="btnRefreshScore"
+                                    Click="btnRefreshScore_Click"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="20,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button Grid.Row="1"
+                Height="30"
+                Width="90"
+                Content="Logout"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Margin="0,0,10,0"
+                x:Name="btnLogout"
+                Click="btnLogout_Click"></Button>
+    </Grid>
+</Window>
