@@ -12,6 +12,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BussinessObject;
 using DataAccess.Repository;
+using LiveCharts.Wpf;
+using LiveCharts;
 using StudentManagementWPF.ViewModels;
 
 namespace StudentManagementWPF
@@ -51,9 +53,13 @@ namespace StudentManagementWPF
                         case "Course":
                             LoadCourses();
                             break;
-                        case "Report":
+                        case "Score":
                             LoadScore();
                             break;
+                        case "Report":
+                            LoadCoursesForReport();
+                            break;
+
                     }
                 }
             }
@@ -113,6 +119,7 @@ namespace StudentManagementWPF
             {
                 var scoreList = scoreRepository.GetScoresByCourse(courseId);
                 dgScore.ItemsSource = scoreList;
+                lbEnroll.Content = scoreList.Count;
             }
             catch (Exception ex)
             {
@@ -143,6 +150,7 @@ namespace StudentManagementWPF
         {
             txtScore.Text = string.Empty;
             txtScoreDesciption.Text = string.Empty;
+            lbEnroll.Content = string.Empty;
         }
 
         #region StudentCRUD
@@ -596,6 +604,75 @@ namespace StudentManagementWPF
             ClearScore();
         }
         #endregion
+
+        #region Report
+        private void LoadCoursesForReport()
+        {
+            try
+            {
+                var courses = courseRepository.GetCourses();
+                cboReportCourses.ItemsSource = courses;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void cboReportCourses_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cboReportCourses.SelectedItem is Course selectedCourse)
+            {
+                LoadScoresForReport(selectedCourse.CourseId);
+            }
+            else
+            {
+                scoreChart.Series.Clear();
+                txtNoData.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void LoadScoresForReport(int courseId)
+        {
+            try
+            {
+                var scores = scoreRepository.GetScoresByCourse(courseId);
+                if (scores.Any())
+                {
+                    var studentNames = scores.Select(s => s.Student.FullName).ToArray();
+                    var studentScores = scores.Select(s => (double)s.StudentScore.Value).ToArray();
+
+                    scoreChart.AxisX[0].Labels = studentNames;
+                    scoreChart.Series = new SeriesCollection
+                    {
+                        new ColumnSeries
+                        {
+                            Title = "Scores",
+                            Values = new ChartValues<double>(studentScores),
+                            DataLabels = true,
+                            LabelPoint = point => point.Y.ToString()
+                        }
+                    };
+
+                    scoreChart.Visibility = Visibility.Visible;
+                    txtNoData.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    scoreChart.Series.Clear();
+                    scoreChart.Visibility = Visibility.Collapsed;
+                    txtNoData.Visibility = Visibility.Visible;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #endregion
+
+
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {

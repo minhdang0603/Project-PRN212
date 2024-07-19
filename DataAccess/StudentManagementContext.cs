@@ -70,12 +70,12 @@ public partial class StudentManagementContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.Scores)
                 .HasForeignKey(d => d.CourseId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__scores__course_i__3B75D760");
 
             entity.HasOne(d => d.Student).WithMany(p => p.Scores)
                 .HasForeignKey(d => d.StudentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__scores__student___3C69FB99");
         });
 

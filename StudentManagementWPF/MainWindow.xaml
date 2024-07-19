@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentManagementWPF"
         xmlns:validation="clr-namespace:StudentManagementWPF.Validations"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700"
@@ -46,6 +47,7 @@
                               AutoGenerateColumns="False"
                               Name="dgStudent"
                               SelectionChanged="dgStudent_SelectionChanged"
+                              CanUserAddRows="False"
                               SelectionMode="Single">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id"
@@ -245,6 +247,7 @@
                               AutoGenerateColumns="False"
                               Name="dgCourse"
                               SelectionChanged="dgCourse_SelectionChanged"
+                              CanUserAddRows="False"
                               SelectionMode="Single">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id"
@@ -353,7 +356,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Report"
+            <TabItem Header="Score"
                      FontSize="15"
                      Padding="20,5,20,5">
                 <Grid>
@@ -364,6 +367,7 @@
                     <DataGrid Grid.Row="0"
                               AutoGenerateColumns="False"
                               Name="dgScore"
+                              CanUserAddRows="False"
                               SelectionChanged="dgScore_SelectionChanged"
                               SelectionMode="Single">
                         <DataGrid.Columns>
@@ -396,14 +400,14 @@
                             <Label Content="Course:"
                                    Margin="0,0,20,0" />
                             <ComboBox x:Name="cboCourses"
-                                     Width="150"
-                                     Height="25" 
-                                     SelectionChanged="cboCourses_SelectionChanged"/>
+                                      Width="150"
+                                      Height="25"
+                                      SelectionChanged="cboCourses_SelectionChanged" />
                             <Label Content="Student:"
                                    Margin="20,0,0,0" />
                             <ComboBox x:Name="cboStudents"
-                                     Width="160"
-                                     Height="25" />
+                                      Width="160"
+                                      Height="25" />
                             <Label Content="Score:"
                                    Margin="20,0,0,0" />
                             <TextBox x:Name="txtScore"
@@ -440,6 +444,12 @@
                                  TextWrapping="Wrap"
                                  Grid.RowSpan="2"
                                  Margin="95,10,397,0" />
+                        <Label Content="Number of enrollments: "
+                               Grid.Row="2"
+                               Margin="430,0,0,0" />
+                        <Label x:Name="lbEnroll"
+                               Grid.Row="2"
+                               Margin="600,0,0,0" />
                         <StackPanel Grid.Row="5"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Center"
@@ -469,6 +479,49 @@
                                     Margin="20,0,0,0" />
                         </StackPanel>
                     </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Report"
+                     FontSize="15"
+                     Padding="20,5,20,5">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ComboBox x:Name="cboReportCourses"
+                              SelectionChanged="cboReportCourses_SelectionChanged"
+                              DisplayMemberPath="CourseName"
+                              SelectedValuePath="CourseId"
+                              Margin="0,0,0,10" />
+                    <TextBlock x:Name="txtNoData"
+                               Text="No data available"
+                               Visibility="Collapsed"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Grid.Row="1"
+                               Foreground="Red" />
+                    <lvc:CartesianChart x:Name="scoreChart"
+                                        Grid.Row="1"
+                                        Margin="0,10,0,0">
+                        <lvc:CartesianChart.Series>
+                            <lvc:ColumnSeries Title="Scores"
+                                              Values="{Binding Scores}"
+                                              DataLabels="True"
+                                              LabelPoint="{Binding LabelFormatter}">
+                            </lvc:ColumnSeries>
+                        </lvc:CartesianChart.Series>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Students"
+                                      Labels="{Binding StudentNames}"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Scores"
+                                      MinValue="0"
+                                      MaxValue="10"></lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
                 </Grid>
             </TabItem>
         </TabControl>
